@@ -39,6 +39,8 @@ public class Artikel
     public string Artikelbild { get; init; }
     
     public IReadOnlyCollection<string>? IndividuellesFelds { get; init; }
+    
+    public string Bewirtschaftungsart { get; init; }
 
     public Artikel()
     {
@@ -71,6 +73,7 @@ public class Artikel
         Einkaufspreis = string.IsNullOrEmpty(einkaufspreis) || einkaufspreis == "DSC_IGNORE" ? null : decimal.Parse(einkaufspreis);
         Artikelbild = elem.Descendants("Artikelbild").FirstOrDefault()?.Value;
         IndividuellesFelds = elem.Descendants().Where(a => a.Name.ToString().StartsWith("IndividuellesFeld")).Select(x => x.Value).ToList();
+        Bewirtschaftungsart = elem.Descendants("Bewirtschaftungsart").FirstOrDefault()?.Value;
     }
     
     public async Task WriteXml(XmlWriter writer)
@@ -93,7 +96,8 @@ public class Artikel
         await writer.Wr("ArtikelPreisBeziehtSichAufMenge", ArtikelPreisBeziehtSichAufMenge);
         await writer.Wr("Einkaufspreis", Einkaufspreis);
         await writer.Wr("Artikelbild", Artikelbild);
-        
+        await writer.Wr("Bewirtschaftungsart", Bewirtschaftungsart);
+
         for (int i = 0; i < 5; ++i)
         {
             await writer.Wr($"IndividuellesFeld{i+1}", IndividuellesFelds?.ElementAtOrDefault(i));
