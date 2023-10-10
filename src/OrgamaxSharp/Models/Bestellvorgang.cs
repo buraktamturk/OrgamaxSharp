@@ -90,6 +90,8 @@ public record Bestellvorgang
             }
         }
         
+        await writer.Wr("AnmerkungenBestellung", AnmerkungenBestellung);
+
         await writer.WriteEndElementAsync();
     }
 }
